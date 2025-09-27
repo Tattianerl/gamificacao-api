@@ -1,0 +1,36 @@
+{
+  "name": "gamificacao",
+  "version": "1.0.0",
+  "description": "Sistema de gamificacao para vendas",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --watch src --exec ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prisma:studio": "prisma studio",
+    "postinstall": "prisma generate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Tatiane Lima",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.16.2",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.5.2",
+    "nodemon": "^3.1.10",
+    "prisma": "^6.16.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.2"
+  }
+}
