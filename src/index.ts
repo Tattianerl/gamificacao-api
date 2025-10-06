@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoutes from './routes/auth';
 import salesRoutes from './routes/sales';
 import usersRoutes from './routes/users';
+import adminRoutes from './routes/adminRoutes';
 import dotenv from 'dotenv';
 import cron from "node-cron";
 import { prisma } from './prisma';
@@ -13,6 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
 app.use('/sales', salesRoutes);
 app.use('/users', usersRoutes);
@@ -20,9 +22,9 @@ app.use('/users', usersRoutes);
 app.get('/', (req, res) => res.send('API de Gamificação ativa'));
 
 const PORT = process.env.PORT || 3333;
-app.listen(PORT, () => console.log(`Server rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
 
-// 🔄 Cron job: todo dia 1 do mês às 00:00
+// Cron job: todo dia 1 do mês às 00:00 zera dados
 cron.schedule("0 0 1 * *", async () => {
   console.log("🔄 Zerando pontos dos atendentes...");
 

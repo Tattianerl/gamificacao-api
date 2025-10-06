@@ -11,7 +11,7 @@ router.post('/', ensureAuth, async (req: AuthRequest, res) => {
   if (!value || !role) return res.status(400).json({ error: 'value e role são obrigatórios' });
 
   const roleStr = (role as string).toLowerCase();
-  if (!['tendente', 'caixa', 'estoque'].includes(roleStr)) {
+  if (!['atendente', 'caixa', 'estoque'].includes(roleStr)) {
     return res.status(400).json({ error: 'role inválida' });
   }
   if (!req.userId) return res.status(401).json({ error: 'Usuário não autenticado' });
@@ -41,9 +41,11 @@ router.post('/', ensureAuth, async (req: AuthRequest, res) => {
 
 // listar vendas do usuário logado
 router.get('/me', ensureAuth, async (req: AuthRequest, res) => {
-  if (!req.userId) return res.status(401).json({ error: 'Usuário não autenticado' });
+  if (!req.userId) 
+    return res.status(401).json({ error: 'Usuário não autenticado' });
   const sales = await prisma.sale.findMany({ where: { userId: req.userId }, orderBy: { createdAt: 'desc' } });
   return res.json({ sales });
+  
 });
 
 export default router;

@@ -9,7 +9,8 @@ const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 // Register
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
-  if (!name || !email || !password) return res.status(400).json({ error: 'Campos obrigatórios' });
+  if (!name || !email || !password) 
+    return res.status(400).json({ error: 'Campos obrigatórios' });
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) return res.status(400).json({ error: 'Email já cadastrado' });
