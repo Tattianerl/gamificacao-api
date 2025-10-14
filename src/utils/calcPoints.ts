@@ -1,8 +1,8 @@
-export type RoleStr = 'tendente' | 'caixa' | 'estoque';
+export type RoleStr = 'atendente' | 'caixa' | 'estoque';
 
 export function getMultiplier(role: RoleStr) {
   switch (role) {
-    case 'tendente': return 12;
+    case 'atendente': return 12;
     case 'caixa': return 3;
     case 'estoque': return 6;
     default: return 0;
