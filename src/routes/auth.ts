@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
     data: { name, email, password: hashed }
   });
 
-  const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '7d' });
+  const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
   return res.json({ user: { id: user.id, name: user.name, email: user.email, points: user.points }, token });
 });
 

@@ -1,41 +1,40 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { prisma } from '../prisma'; 
+import { prisma } from '../prisma';
 
+// Define a tipagem personalizada para Request
 export interface AuthRequest extends Request {
-  userId?: number;
+  user?: {
+    id: number;
+    role: string;
+  };
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
-
-// middleware que garante que o token é válido e que o usuário é admin (role === 'admin')
-export async function ensureAdmin(req: AuthRequest, res: Response, next: NextFunction) {
-  const header = req.headers.authorization;
-  if (!header) {
-    return res.status(401).json({ error: 'Token não enviado' });
-  }
-
-  const [, token] = header.split(' ');
-
+// Middleware que valida o token e verifica se o usuário é admin
+export const ensureAdmin = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as any;
-
-    if (!payload || !payload.userId) {
-      return res.status(401).json({ error: 'Token inválido' });
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ error: 'Token não fornecido' });
     }
 
-    const user = await prisma.user.findUnique({ where: { id: payload.userId } });
-    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+    const [, token] = authHeader.split(' ');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { userId: number; role: string };
 
-    // padronize role em lowercase no banco ('admin' / 'user' / 'atendente' etc.)
-    if ((user.role ?? '').toLowerCase() !== 'admin') {
-      return res.status(403).json({ error: 'Acesso negado. Apenas administradores podem acessar.' });
+    const user = await prisma.user.findUnique({ where: { id: decoded.userId } });
+    if (!user) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
     }
 
-    req.userId = user.id;
-    return next();
+    // 🔥 Verifica se o usuário é admin
+    if (user.role !== 'admin') {
+      return res.status(403).json({ error: 'Acesso negado: apenas administradores' });
+    }
+
+    req.user = { id: user.id, role: user.role };
+    next();
   } catch (err) {
-    console.error('ensureAdmin error:', err);
-    return res.status(401).json({ error: 'Token inválido' });
+    console.error('Erro no ensureAdmin:', err);
+    return res.status(401).json({ error: 'Token inválido ou expirado' });
   }
-}
+};

@@ -14,7 +14,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Rotas protegidas (admin)
 app.use('/admin', adminRoutes);
+// Rotas públicas
 app.use('/auth', authRoutes);
 app.use('/sales', salesRoutes);
 app.use('/users', usersRoutes);
