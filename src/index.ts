@@ -23,7 +23,7 @@ app.use('/users', usersRoutes);
 
 app.get('/', (req, res) => res.send('API de Gamificação ativa'));
 
-const PORT = process.env.PORT || 3333;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
 
 // Cron job: todo dia 1 do mês às 00:00 zera dados
