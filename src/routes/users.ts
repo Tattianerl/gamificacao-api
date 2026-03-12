@@ -164,7 +164,8 @@ router.put('/me', ensureAuth, async (req: AuthRequest, res) => {
 
     const updatedUser = await prisma.user.update({
       where: { id: req.userId },
-      data: { genero, avatar },
+      data: { ...(genero && { genero }),
+              ...(avatar && { avatar }) },
       select: {
         id: true,
         name: true,
