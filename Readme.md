@@ -139,13 +139,7 @@ npm install
 npx prisma generate  
 npm run dev
 ```
-### 🚀 Deploy (Supabase)
-```json
-git add .  
-git commit -m "Atualização: progresso por função + melhorias nas rotas"  
-git push
-```
----
+
 
 ### 👩‍💻 Autora
 Tatiane Lima  
